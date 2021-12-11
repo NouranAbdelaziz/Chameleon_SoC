@@ -73,11 +73,11 @@ module AHBlite_sys_0(
 		//assign IRQ[15:0] = 0;
 
         //Inputs
-        wire HSEL_S0, HSEL_S1, HSEL_S2, HSEL_S3, HSEL_S4, HSEL_SS0;
+        wire HSEL_S0, HSEL_S1, HSEL_S2, HSEL_S3, HSEL_S4,HSEL_S5, HSEL_SS0;
 
         //Outputs
-        wire    [31:0]   HRDATA_S0, HRDATA_S1, HRDATA_S2, HRDATA_S3, HRDATA_S4, HRDATA_SS0, HRDATA;
-        wire             HREADY_S0, HREADY_S1, HREADY_S2, HREADY_S3, HREADY_S4, HREADY_SS0, HREADY;
+        wire    [31:0]   HRDATA_S0, HRDATA_S1, HRDATA_S2, HRDATA_S3, HRDATA_S4,HRDATA_S5, HRDATA_SS0, HRDATA;
+        wire             HREADY_S0, HREADY_S1, HREADY_S2, HREADY_S3, HREADY_S4, HREADY_S5, HREADY_SS0, HREADY;
         wire  [1:0]   HRESP;
        // wire          IRQ;
         
@@ -211,7 +211,40 @@ module AHBlite_sys_0(
 
 
 	// SLAVE 4
-	assign HREADY_S4 = 1;
+	//assign HREADY_S4 = 1;
+       AHB_ML_ACC S_4 (
+		.HCLK(HCLK),
+		.HRESETn(HRESETn),
+		.HSEL(HSEL_S4),
+		.HADDR(HADDR),
+		.HREADY(HREADY),
+		.HWRITE(HWRITE),
+		.HTRANS(HTRANS),
+		.HSIZE(HSIZE),
+		.HWDATA(HWDATA),
+		//.db_reg(db_reg),
+
+		.HRDATA(HRDATA_S4),
+		.HREADYOUT(HREADY_S4),
+		.HRESP(HRESP)
+	);	
+	
+	AHB_GDC_ACC S_5 (
+		.HCLK(HCLK),
+		.HRESETn(HRESETn),
+		.HSEL(HSEL_S5),
+		.HADDR(HADDR),
+		.HREADY(HREADY),
+		.HWRITE(HWRITE),
+		.HTRANS(HTRANS),
+		.HSIZE(HSIZE),
+		.HWDATA(HWDATA),
+		//.db_reg(db_reg),
+
+		.HRDATA(HRDATA_S5),
+		.HREADYOUT(HREADY_S5),
+		.HRESP(HRESP)
+	);	
 
 
 	//AHB Bus
@@ -249,6 +282,12 @@ module AHBlite_sys_0(
 		.HSEL_S4(HSEL_S4),
 		.HREADY_S4(HREADY_S4),
 		.HRDATA_S4(HRDATA_S4),
+            
+               //SLAVE #5
+               
+                .HSEL_S5(HSEL_S5),
+		.HREADY_S5(HREADY_S5),
+		.HRDATA_S5(HRDATA_S5),
 
 		// Subsystem # 0
 		.HSEL_SS0(HSEL_SS0),
