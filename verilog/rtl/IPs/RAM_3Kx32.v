@@ -1,6 +1,9 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
+
+`define NO_DFFRAM
+
 module RAM_3Kx32 (
 `ifdef USE_POWER_PINS
     VPWR,

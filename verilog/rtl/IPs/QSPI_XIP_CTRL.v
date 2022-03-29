@@ -2,7 +2,7 @@
 `default_nettype none
 
 // uncomment the following line to use the optimized cache (SKY130A only)
-//`define NO_HC_CACHE
+`define NO_HC_CACHE
 
 /*
     AHB-Lite Quad I/O flash reader with 32x16 DM$
