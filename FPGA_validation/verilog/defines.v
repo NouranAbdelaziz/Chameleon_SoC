@@ -1,7 +1,9 @@
 `define NO_HC_CACHE
 `define NO_HC_REGF
-
-`define USE_RESET_BTN
+//`define FETCH_FROM_ROM
+//`define ICARUS_VERILOG
+ `define USE_RESET_BTN
+`define FETCH_FROM_FLASH
 
 `ifdef ICARUS_VERILOG 
     `define ROM_FILE_PATH "../mem/test_rom_v.mem"
