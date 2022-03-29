@@ -42,15 +42,17 @@ The AHB bus system passes all the signals of the master (ibex core) to the five 
 ### FPGA Validation 
 
 To validate our design, we integrated a read-only memory on which we load the program (hex file) on the SoC. 
+![FW_diagram](https://user-images.githubusercontent.com/79912650/160588662-c92d0673-0491-405b-82da-f313a8a0a43b.png)
 
-![ROM_diagram](https://user-images.githubusercontent.com/79912650/160588491-c3a9b21e-787e-41ce-9a14-d0afbd546824.png)
 
 
 ### Flash Writer and UART master integration 
 
 The read-only memory is not very practical because once the program loaded, we can not reload another program. That is why we integrated UART master which will program Flash writer slave on the AHB bus and the Flash writer will communicate with the flash in order tp program it. Once the flash is programmed, the ibex core will be the master on the bus and will fetch instructions from the flash using the QSPI flash controller. 
 
-![FW_diagram](https://user-images.githubusercontent.com/79912650/160588527-48148ab8-e1ed-406f-b8fa-f151cc1d9029.png)
+![ROM_diagram](https://user-images.githubusercontent.com/79912650/160588689-e4018247-41f2-4fd4-9821-c43cf246ad9b.png)
+
+
 
 
 
