@@ -1,7 +1,9 @@
 
 `default_nettype none
 `timescale 1ns/1ns
-//`define		USE_DFFRAM_BEH
+`define		USE_DFFRAM_BEH
+`define 		NO_HC_CACHE
+`define 		NO_DFFRAM
 
 module soc_core (
 `ifdef USE_POWER_PINS
