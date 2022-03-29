@@ -39,7 +39,15 @@ The AHB bus system passes all the signals of the master (ibex core) to the five 
 ## Accelerators connections testing 
 <img src="./docs/4.png" size="80%">
 
-## Future Work
-To make the acceleration more efficient, we want the accelerators to directly access the memory without the interaction with ibex core at all inorder to decrease the overhead of loading two times; one to read from the memory and one to load the data to the accelerator. We are now integrating a direct memory access (DMA) system through adding (DMA controller) DMAC which will have both a master and slave interface. The slave interface to get configured using the master core and a master interface to be able to read from the memory. 
-![SoC_with_DMA drawio](https://user-images.githubusercontent.com/79912650/145666496-d0ae544e-927e-48f2-bf4d-aae2e44dd80d.png)
+### FPGA Validation 
+
+To validate our design, we integrated a read-only memory on which we load the program (hex file) on the SoC. 
+![ROM_diagram](https://user-images.githubusercontent.com/79912650/160587792-735f0b53-80f2-49cd-acb5-dc74ef7469b5.jpeg)
+
+### Flash Writer and UART master integration 
+
+The read-only memory is not very practical because once the program loaded, we can not reload another program. That is why we integrated UART master which will program Flash writer slave on the AHB bus and the Flash writer will communicate with the flash in order tp program it. Once the flash is programmed, the ibex core will be the master on the bus and will fetch instructions from the flash using the QSPI flash controller. 
+![FW_diagram](https://user-images.githubusercontent.com/79912650/160587767-5f3a13dd-11be-4d19-b863-ce5f04fbfd99.jpeg)
+
+
 
