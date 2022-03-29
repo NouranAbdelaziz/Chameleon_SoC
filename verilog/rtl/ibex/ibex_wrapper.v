@@ -82,7 +82,7 @@ module ibex_wrapper
     .test_en_i(dground),     // enable all clock gates for testing
 
     .hart_id_i(32'b0),  //???
-    .boot_addr_i(32'b0), //???
+    .boot_addr_i(`PC_START_ADDRESS), //???
 
     // Instruction memory interface
     .instr_req_o(instr_req_o),
