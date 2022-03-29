@@ -30,11 +30,6 @@
         output wire         HSEL_S4,
         input wire          HREADY_S4,
         input wire  [31:0]  HRDATA_S4,
-        
-        // SLAVE #5
-        output wire         HSEL_S5,
-        input wire          HREADY_S5,
-        input wire  [31:0]  HRDATA_S5,
 
 
         // SubSystem # 0
@@ -56,8 +51,7 @@
 		assign HSEL_S1 = (PAGE == 8'h20);
 		assign HSEL_S2 = (PAGE == 8'h48);
 		assign HSEL_S3 = (PAGE == 8'h49);
-                assign HSEL_S4 = (PAGE == 8'h4A);
-                assign HSEL_S5 = (PAGE == 8'h4B);
+        assign HSEL_S4 = (PAGE == 8'h4A);
 		assign HSEL_SS0 = (PAGE == 8'h40);
 	
 
@@ -67,7 +61,6 @@
 			(APAGE == 8'h48) ? HREADY_S2 :
 			(APAGE == 8'h49) ? HREADY_S3 :
                         (APAGE == 8'h4A) ? HREADY_S4 :
-                        (APAGE == 8'h4B) ? HREADY_S5 :
 			(APAGE == 8'h40) ? HREADY_SS0 :
 			1'b1;
 
@@ -77,8 +70,7 @@
 			(APAGE == 8'h20) ? HRDATA_S1 :
 			(APAGE == 8'h48) ? HRDATA_S2 :
 			(APAGE == 8'h49) ? HRDATA_S3 :
-                        (APAGE == 8'h4A) ? HRDATA_S4 :
-                        (APAGE == 8'h4B) ? HRDATA_S5 :
+            (APAGE == 8'h4A) ? HRDATA_S4 :
 			(APAGE == 8'h40) ? HRDATA_SS0 :
 			32'hDEADBEEF;
 
