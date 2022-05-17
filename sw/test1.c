@@ -654,9 +654,10 @@ int main(){
     else
         uart_puts(0,"Failed!\n", 8);
     
+    	//gpio_write (0x0033);
     
-    
-    
+    uart_puts(0,"Yesss1!\n", 8);
+    //gpio_write(0x0000);
 
     const q7_t Im_in[75] = { 2,1,0,
 
@@ -717,6 +718,9 @@ int main(){
 
 
         
+	uart_puts(0,"Yesss2!\n", 8);
+	//gpio_write(0x1111);
+	
 
         
 
@@ -843,8 +847,12 @@ int main(){
                         -1, -1, 1,
             
    };
+   
+   
+   
+   //gpio_write (0x2222);
 
-                      
+      	uart_puts(0,"Yesss3!\n", 8);                
 
      const uint16_t ch_im_out = 4;
 
@@ -866,15 +874,17 @@ int main(){
 
     const uint16_t out_shift =0;
 
-    uart_puts(0, "Done1!\n\n", 8);
+
 
     const uint16_t dim_im_out_x = 3;
 
     const uint16_t dim_im_out_y = 3;
+    
+       uart_puts(0,"Yesss4!\n", 8);
 
     q7_t Im_out [ dim_im_out_x * dim_im_out_y *ch_im_out];
     
-    uart_puts(0, "Done2!\n\n", 8);
+    //q7_t Im_out [ 36];
 
     q15_t *bufferA;
 
@@ -886,15 +896,15 @@ int main(){
     const uint16_t dilation_y =1;
 
 
-	//gpio_write (0x3333);
-	
-    uart_puts(0, "Done3!\n\n", 8);
+	uart_puts(0,"Yesss5!\n", 8);
+	//gpio_write (0x0033);
 
     local_convolve_HWC_q7_nonsquare(Im_in, dim_im_in_x, dim_im_in_y, ch_im_in, wt, ch_im_out, dim_kernel_x, dim_kernel_y, padding_x, padding_y, stride_x, stride_y, dilation_x, dilation_y, bias, Im_out, dim_im_out_y, dim_im_out_y, bufferA, bufferB);
     
-    //gpio_write (0x4444);
-    uart_puts(0, "Done4!\n\n", 8);
-    int n = dim_im_out_x * dim_im_out_y *ch_im_out;
+    //gpio_write (0x0044);
+    	uart_puts(0,"Yesss6!\n", 8);
+    //int n = dim_im_out_x * dim_im_out_y *ch_im_out;
+    int n = 36;
     for (int i =0; i < n ; i++)
     
     {

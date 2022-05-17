@@ -41,4 +41,3 @@ SECTIONS
     } > SRAM AT > FLASH
 
 }
-

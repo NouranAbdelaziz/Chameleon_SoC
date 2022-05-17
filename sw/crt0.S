@@ -6,6 +6,7 @@
 #define ext_mul(_rd, _rs1, _rs2) \
 r_type_insn(0b0000000, _rs2, _rs1, 0b111, _rd, 0b0001011)
 
+
 .macro wrtmrcmp reg
 	csrrw   zero, 0xC03, \reg
 .endm
@@ -19,6 +20,8 @@ r_type_insn(0b0000000, _rs2, _rs1, 0b111, _rd, 0b0001011)
 	
 
 	.org 0
+	
+  
 reset_vector:
 	j		reset_hand
 	
@@ -43,39 +46,55 @@ ebreak_vector:
 
 	.org	28
 	j		.
-	
+
 	.org	64		# IRQ 0
-	j		IRQ
+	j		UART0_handler
 
 	.org	68		# IRQ 1
-	j		IRQ
+	j		UART1_handler
 	
-	.org	72
+	.org	72		# IRQ 2
+	j		SPI0_handler
+
+	.org	76		# IRQ 3
+	j		SPI1_handler
+
+	.org	80		# IRQ 4
 	j		IRQ
 
-	.org	76
+	.org	84		# IRQ 5
 	j		IRQ
 
-	.org	80
-	j		IRQ
-
-	.org	84
-	j		IRQ
-
-	.org	88
-	j		IRQ
+	.org	88		# IRQ 6
+	j		TMR0_handler
 
 	.org	92		# IRQ 7
-	j		IRQ
+	j		TMR1_handler
 
 	.org	96		# IRQ 8
-	j		IRQ
+	j		TMR2_handler
 
 	.org	100		# IRQ 9
-	j		IRQ
+	j		TMR3_handler
 
 	.org	104		# IRQ 10
+	j		WDT0_handler
+	
+	.org	108		# IRQ 11
+	j		WDT1_handler
+	
+	.org	112		# IRQ 12
 	j		IRQ
+	
+	.org	116		# IRQ 13
+	j		IRQ
+	
+	.org	120		# IRQ 14
+	j		IRQ
+	
+	.org	124		# IRQ 15
+	j		IRQ
+	
 
 	.org 128
 reset_hand:
@@ -108,17 +127,8 @@ irq0_hand:
 	#li t0, 0xBAD00BED
 	#mret
 
-.align 8
-#ifdef EXT_MUL
-.global __mulsi3
-__mulsi3:
-        #ext_mul(10, 10, 11)
-		la	t0, 0x49000000
-		sw	a0, 0(t0)
-		sw	a1, 4(t0)
-		lw	a0, 0(t0)
-        ret
-#endif
+	
+
 
 .align 8
 ___App:

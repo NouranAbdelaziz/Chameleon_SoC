@@ -19,7 +19,10 @@
 #define APB_TIMER32_3_BASE_ADDR 0x40b00000
 #define APB_WDT32_0_BASE_ADDR   0x40c00000
 #define APB_WDT32_1_BASE_ADDR   0x40d00000
-
+#define ML_ACC_BASE_ADDR        0X4A000000
+#define GCD_ACC_BASE_ADDR       0X4B000000
+#define tanh_ACC_BASE_ADDR      0X4D000000
+#define sig_ACC_BASE_ADDR       0X4E000000
 /* GPIO */
 #define GPIO_DIN_REG            0x00000000
 #define GPIO_DOUT_REG           0x00000004
@@ -38,7 +41,7 @@ unsigned int volatile *const GPIO_IM = (unsigned int *)(AHB_GPIO_BASE_ADDR + GPI
 /* UART Modules */
 #define UART_DATA_REG           0x00000000
 #define UART_STATUS_REG         0x00000004
-#define UART_CTRL_REG           0x00000004
+#define UART_CTRL_REG           0x00000004 //....
 #define UART_PRESCALER_REG      0x00000008
 #define UART_IM_REG             0x0000000C
 #define UART_TXFIFOTR_REG       0x00000010
@@ -198,3 +201,96 @@ unsigned int volatile * const TMR3_PRE = (unsigned int *) (APB_TIMER32_3_BASE_AD
 unsigned int volatile * const TMR3_CMP = (unsigned int *) (APB_TIMER32_3_BASE_ADDR + TMR_CMP_REG);
 unsigned int volatile * const TMR3_OVCLR = (unsigned int *) (APB_TIMER32_3_BASE_ADDR + TMR_OVCLR_REG);
 unsigned int volatile * const TMR3_IM = (unsigned int *) (APB_TIMER32_3_BASE_ADDR + TMR_IM_REG);
+
+/* WDT Modules: WDT0 & WDT1 */
+#define WDT_WDTMR_REG            0x00000000
+#define WDT_WDLOAD_REG           0x00000004
+#define WDT_WDOV_REG             0x0000000c
+#define WDT_WDOVCLR_REG          0x00000010
+#define WDT_WDEN_REG             0x00000014
+#define WDT_IRQEN_REG            0x00000100
+
+unsigned int volatile *const WDT0_WDTMR = (unsigned int *)(APB_WDT32_0_BASE_ADDR + WDT_WDTMR_REG);
+unsigned int volatile *const WDT0_WDLOAD = (unsigned int *)(APB_WDT32_0_BASE_ADDR + WDT_WDLOAD_REG);
+unsigned int volatile *const WDT0_WDOV = (unsigned int *)(APB_WDT32_0_BASE_ADDR + WDT_WDOV_REG);
+unsigned int volatile *const WDT0_WDOVCLR = (unsigned int *)(APB_WDT32_0_BASE_ADDR + WDT_WDOVCLR_REG);
+unsigned int volatile *const WDT0_WDEN = (unsigned int *)(APB_WDT32_0_BASE_ADDR + WDT_WDEN_REG);
+unsigned int volatile *const WDT0_IRQEN = (unsigned int *)(APB_WDT32_0_BASE_ADDR + WDT_IRQEN_REG);
+
+
+unsigned int volatile *const WDT1_WDTMR = (unsigned int *)(APB_WDT32_1_BASE_ADDR + WDT_WDTMR_REG);
+unsigned int volatile *const WDT1_WDLOAD = (unsigned int *)(APB_WDT32_1_BASE_ADDR + WDT_WDLOAD_REG);
+unsigned int volatile *const WDT1_WDOV = (unsigned int *)(APB_WDT32_1_BASE_ADDR + WDT_WDOV_REG);
+unsigned int volatile *const WDT1_WDOVCLR = (unsigned int *)(APB_WDT32_1_BASE_ADDR + WDT_WDOVCLR_REG);
+unsigned int volatile *const WDT1_WDEN = (unsigned int *)(APB_WDT32_1_BASE_ADDR + WDT_WDEN_REG);
+unsigned int volatile *const WDT1_IRQEN = (unsigned int *)(APB_WDT32_1_BASE_ADDR + WDT_IRQEN_REG);
+
+
+// ML REG
+#define     ML_sumin_REG           0x0
+#define     ML_sum0_REG            0x4
+#define     ML_sum1_REG            0x8
+#define     ML_sum2_REG            0xc           
+#define     ML_sum3_REG            0x10
+#define     ML_a_REG               0x14
+#define     ML_w0_REG              0x18
+#define     ML_w1_REG              0x1c
+#define     ML_w2_REG              0x20
+#define     ML_w3_REG              0x24
+#define     ML_out0_REG            0x28
+#define     ML_out1_REG            0x2c
+#define     ML_out2_REG            0x30
+#define     ML_out3_REG            0x34
+#define     ML_valid_REG           0x38
+
+
+unsigned int volatile * const ML_sumin = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_sumin_REG); 
+unsigned int volatile * const ML_sum0 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_sum0_REG); 
+unsigned int volatile * const ML_sum1 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_sum1_REG); 
+unsigned int volatile * const ML_sum2 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_sum2_REG ); 
+unsigned int volatile * const ML_sum3 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_sum3_REG); 
+unsigned int volatile * const ML_a = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_a_REG); 
+unsigned int volatile * const ML_w0 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_w0_REG); 
+unsigned int volatile * const ML_w1 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_w1_REG); 
+unsigned int volatile * const ML_w2 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_w2_REG); 
+unsigned int volatile * const ML_w3 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_w3_REG); 
+unsigned int volatile * const ML_out0 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_out0_REG); 
+unsigned int volatile * const ML_out1 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_out1_REG); 
+unsigned int volatile * const ML_out2 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_out2_REG); 
+unsigned int volatile * const ML_out3 = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_out3_REG); 
+unsigned int volatile * const ML_valid = (unsigned int *) (ML_ACC_BASE_ADDR  + ML_valid_REG); 
+
+
+
+// Sec REG
+#define     SEC_in1_REG            0x0
+#define     SEC_in2_REG            0x4
+#define     SEC_in3_REG            0x8
+#define     SEC_in4_REG            0xC
+#define     SEC_out_REG            0x10
+
+
+unsigned int volatile * const SEC_in1 = (unsigned int *) (GCD_ACC_BASE_ADDR   + SEC_in1_REG ); 
+unsigned int volatile * const SEC_in2 = (unsigned int *) (GCD_ACC_BASE_ADDR   + SEC_in2_REG); 
+unsigned int volatile * const SEC_in3 = (unsigned int *) (GCD_ACC_BASE_ADDR   + SEC_in3_REG ); 
+unsigned int volatile * const SEC_in4 = (unsigned int *) (GCD_ACC_BASE_ADDR   + SEC_in4_REG); 
+unsigned int volatile * const SEC_out = (unsigned int *) (GCD_ACC_BASE_ADDR   + SEC_out_REG); 
+
+//Tanh
+
+#define     tanh_in_REG            0x0
+#define     tanh_out_REG            0x4
+unsigned int volatile * const Tanh_in = (unsigned int *) (tanh_ACC_BASE_ADDR   + tanh_in_REG); 
+unsigned int volatile * const Tanh_out = (unsigned int *) (tanh_ACC_BASE_ADDR  + tanh_out_REG); 
+
+
+//Sigmoid
+
+#define     Sig_in_REG            0x0
+#define     Sig_out_REG           0x4
+unsigned int volatile * const Sig_in = (unsigned int *) (sig_ACC_BASE_ADDR   + Sig_in_REG ); 
+unsigned int volatile * const Sig_out = (unsigned int *) (sig_ACC_BASE_ADDR   + Sig_out_REG ); 
+
+
+
+
