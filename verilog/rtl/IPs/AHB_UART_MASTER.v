@@ -1,82 +1,120 @@
-/*
-	Copyright 2020 Mohamed Shalan
-	
-	Licensed under the Apache License, Version 2.0 (the "License"); 
-	you may not use this file except in compliance with the License. 
-	You may obtain a copy of the License at:
-	http://www.apache.org/licenses/LICENSE-2.0
-	Unless required by applicable law or agreed to in writing, software 
-	distributed under the License is distributed on an "AS IS" BASIS, 
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-	See the License for the specific language governing permissions and 
-	limitations under the License.
-*/
 
-/*
-  A UART that can act as AHB-Lite Master
-  The UART does not have a programmable prescaler. The prescaler is fixed 
-  and is provided as a module parameter. 
-    Baudrate = CLK_Freq/((Prescaler+1)*16)
-    Prescaler = CLK_Freq/(16*Baudrate) - 1
-  It supports 2 commands: 
-    Bus Read (A5) 
-      < 0xA5
-      < Address byte 0
-      < Address byte 1
-      < Address byte 2
-      < Address byte 3
-      > Data byte 0
-      > Data byte 1
-      > Data byte 2
-      > Data byte 3
-    
-    Bus Write (A3)
-      < 0xA3
-      < Address byte 0
-      < Address byte 1
-      < Address byte 2
-      < Address byte 3
-      < Data byte 0
-      < Data byte 1
-      < Data byte 2
-      < Data byte 3  
-*/
 
 `timescale              1ns/1ps
 `default_nettype        none
 
-//`include "./include/ahb_util.vh"
+//`include "include/ahb_util.vh"
+`define AHB_REG(name, size, offset, init, prefix)   \
+        reg [size-1:0] name; \
+        wire ``name``_sel = wr_enable & (last_HADDR[7:0] == offset); \
+        always @(posedge HCLK or negedge HRESETn) \
+            if (~HRESETn) \
+                ``name`` <= 'h``init``; \
+            else if (``name``_sel) \
+                ``name`` <= ``prefix``HWDATA[``size``-1:0];\
+
+`define AHB_SLAVE_IFC(prefix)   \
+        input               ``prefix``HSEL,\
+        input wire [31:0]   ``prefix``HADDR,\
+        input wire [1:0]    ``prefix``HTRANS,\
+        input wire          ``prefix``HWRITE,\
+        input wire          ``prefix``HREADY,\
+        input wire [31:0]   ``prefix``HWDATA,\
+        input wire [2:0]    ``prefix``HSIZE,\
+        output wire         ``prefix``HREADYOUT,\
+        output wire [31:0]  ``prefix``HRDATA
+        
+
+`define AHB_SLAVE_RO_IFC(prefix)   \
+        input               ``prefix``HSEL,\
+        input wire [31:0]   ``prefix``HADDR,\
+        input wire [1:0]    ``prefix``HTRANS,\
+        input wire          ``prefix``HWRITE,\
+        input wire          ``prefix``HREADY,\
+        output wire         ``prefix``HREADYOUT,\
+        output wire [31:0]  ``prefix``HRDATA
+
+`define AHB_MASTER_IFC(prefix) \
+        output wire [31:0]  ``prefix``HADDR,\
+        output wire [1:0]   ``prefix``HTRANS,\
+        output wire [2:0] 	 ``prefix``HSIZE,\
+        output wire         ``prefix``HWRITE,\
+        output wire [31:0]  ``prefix``HWDATA,\
+        input wire          ``prefix``HREADY,\
+        input wire [31:0]   ``prefix``HRDATA 
+        
+
+`define AHB_SLAVE_EPILOGUE(prefix) \
+    reg             last_HSEL; \
+    reg [31:0]      last_HADDR; \
+    reg             last_HWRITE; \
+    reg [1:0]       last_HTRANS; \
+    \
+    always@ (posedge HCLK) begin\
+        if(``prefix``HREADY) begin\
+            last_HSEL       <= ``prefix``HSEL;   \
+            last_HADDR      <= ``prefix``HADDR;  \
+            last_HWRITE     <= ``prefix``HWRITE; \
+            last_HTRANS     <= ``prefix``HTRANS; \
+        end\
+    end\
+    \
+    wire rd_enable = last_HSEL & (~last_HWRITE) & last_HTRANS[1]; \
+    wire wr_enable = last_HSEL & (last_HWRITE) & last_HTRANS[1]; 
+
+
+`define REG_FIELD(reg_name, fld_name, from, to)\
+    wire [``to``-``from``:0] ``reg_name``_``fld_name`` = reg_name[to:from]; 
+
+`define AHB_READ assign HRDATA = 
+
+`define AHB_REG_READ(name, offset) (last_HADDR[7:0] == offset) ? name : 
+
+/*
+module TEST(
+    input wire HCLK,
+    input wire HRESETn,
+
+    `AHB_SLAVE_IFC(S0_),
+    `AHB_MASTER_IFC(M0_)
+);
+
+    `AHB_SLAVE_EPILOGUE(S0_)
+
+    `AHB_REG(XXX, 20, 8'h20, 0, S0_)
+
+    `REG_FIELD(XXX, xxx, 2, 15)
+
+    `AHB_READ
+        `AHB_REG_READ(XXX, 8'h20)
+        32'hDEADBEEF;
+
+endmodule
+*/
+
 
 // 19.2K using 16MHz
-module AHB_UART_MASTER #(parameter [15:0] PRESCALE=51) 
+module AHB_UART_MASTER #(parameter PRESCALE=51) 
 (
     input wire          HCLK,
     input wire          HRESETn,
     
-    //`AHB_MASTER_IFC(),
-    
-    output wire [31:0]  HADDR,
-        output wire [1:0]   HTRANS,
-        output wire [2:0]   HSIZE,
-        output wire         HWRITE,
-        output wire [31:0]  HWDATA,
-        input wire          HREADY,
-        input wire [31:0]   HRDATA, 
+    `AHB_MASTER_IFC(),
 
     input wire          RX,
-    output wire         TX
+    output wire         TX,
 
-    //output [3:0]        st
+    output [3:0] st
 );
 
     localparam 
-        ST_IDLE   = 4'd15, 
-        ST_RD     = 4'd1,
-        ST_WR     = 4'd2, 
-        ST_ADDR1  = 4'd3,
-        ST_ADDR2  = 4'd4, 
-        ST_ADDR3  = 4'd5,
-        ST_ADDR4  = 4'd6,
+        ST_IDLE  = 4'd15, 
+        ST_RD    = 4'd1,
+        ST_WR    = 4'd2, 
+        ST_ADDR1 = 4'd3,
+        ST_ADDR2 = 4'd4, 
+        ST_ADDR3 = 4'd5,
+        ST_ADDR4 = 4'd6,
         ST_WDATA1 = 4'd7,
         ST_WDATA2 = 4'd8,
         ST_WDATA3 = 4'd9,
@@ -91,7 +129,7 @@ module AHB_UART_MASTER #(parameter [15:0] PRESCALE=51)
     wire        rx_done;
     wire        tx_done;
 
-    wire [7:0]  tx_data;
+    wire  [7:0]  tx_data;
     wire [7:0]  rx_data;
 
     reg         tx_start;
@@ -284,7 +322,7 @@ module AHB_UART_MASTER #(parameter [15:0] PRESCALE=51)
         else
             tx_start <= 'b0;
         
-    //assign st = rx_data[3:0];
+    assign st = rx_data[3:0];
 
 endmodule
 
@@ -293,14 +331,7 @@ module AHB_MASTER
     input wire          HCLK,
     input wire          HRESETn,
     
-    //`AHB_MASTER_IFC(),
-    output wire [31:0]  HADDR,
-        output wire [1:0]   HTRANS,
-        output wire [2:0]   HSIZE,
-        output wire         HWRITE,
-        output wire [31:0]  HWDATA,
-        input wire          HREADY,
-        input wire [31:0]   HRDATA, 
+    `AHB_MASTER_IFC(),
 
     input wire          wr,
     input wire          rd,
@@ -342,7 +373,7 @@ module AHB_MASTER
                         else 
                             nstate = ST_RWAIT;
             ST_WWAIT:   if(HREADY)
-                            nstate = ST_WADDR; 
+                            nstate = ST_WADDR;
                         else 
                             nstate = ST_WWAIT;
             ST_RADDR:   if(HREADY)
@@ -378,7 +409,7 @@ endmodule
 // Baudrate = Clk/((prescale+1)*16)
 // 19200 = 50,000,000 / ((prescale+1)*16)
 // prescale = 161.76 ==> 162
-module BAUDGEN
+/*module BAUDGEN
 (
   input wire clk,
   input wire rst_n,
@@ -630,3 +661,5 @@ module UART_TX(
   assign tx = tx_reg;
   
 endmodule
+*/
+
