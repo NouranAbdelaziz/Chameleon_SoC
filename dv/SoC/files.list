@@ -1,7 +1,7 @@
 +define+FUNCTIONAL=1
 +define+UNIT_DELAY=#1
-/home/cse-p07-2179-gaa/work/openlane/pdks/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v
-/home/cse-p07-2179-gaa/work/openlane/pdks/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v
+../../openlane/verilog/primitives.v
+../../openlane/verilog/sky130_fd_sc_hd.v
 
 ../../dv/DFFRAM_beh.v
 
@@ -30,6 +30,7 @@
 ../../verilog/rtl/IPs/DFFRAM_4K.v
 ../../verilog/rtl/IPs/DFFRAMBB.v
 ../../verilog/rtl/acc/AHB_SPM.v
+../../verilog/rtl/acc/AHB_ML_ACC.v
 #+define+NO_HC_CACHE=1
 ../../verilog/rtl/IPs/QSPI_XIP_CTRL.v
 ../../verilog/rtl/IPs/DMC_32x16HC.v

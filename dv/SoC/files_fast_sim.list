@@ -1,7 +1,16 @@
-/home/cse-p07-2179-gaa/work/openlane/pdks/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v
-/home/cse-p07-2179-gaa/work/openlane/pdks/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v
+../../openlane/verilog/primitives.v
+../../openlane/verilog/sky130_fd_sc_hd.v
 
 ../../dv/DFFRAM_beh.v
+
+../../verilog/rtl/IPs/AHB_FLASH_WRITER.v
+../../verilog/rtl/acc/AHB_ML_ACC.v
+../../verilog/rtl/acc/AHB_Sec_ACC.v
+../../verilog/rtl/acc/AHB_tanh_ACC.v
+../../verilog/rtl/acc/AHB_Sigmoid_ACC.v
+../../verilog/rtl/acc/AHB_SPM.v
+../../verilog/rtl/acc/AHB_GDC_ACC.v
+../../verilog/rtl/IPs/QSPI_XIP_CTRL.v
 
 ../../verilog/rtl/AHB_sys_0/AHBlite_sys_0.v 
 ../../verilog/rtl/AHB_sys_0/AHBlite_bus0.v
@@ -25,15 +34,28 @@
 ../../verilog/rtl/IPs/APB_SPI.v
 ../../verilog/rtl/IPs/APB_I2C.v
 ../../verilog/rtl/IPs/AHBSRAM.v
-../../verilog/rtl/IPs/DFFRAM_4K.v
+#../../verilog/rtl/IPs/DFFRAM_4K.v
 ../../verilog/rtl/IPs/DFFRAMBB.v
-../../verilog/rtl/acc/AHB_SPM.v
-+define+NO_HC_CACHE=1
-../../verilog/rtl/IPs/QSPI_XIP_CTRL.v
-../../verilog/rtl/IPs/DMC_32x16HC.v
-+define+NO_DFFRAM=1
+../../verilog/rtl/IPs/gpio_bidir.v
+../../verilog/rtl/IPs/btn_sync.v
+
+
+
++define+NO_HC_CACHE
+
+#../../verilog/rtl/IPs/DMC_32x16HC.v
++define+NO_DFFRAM
 #../../verilog/rtl/IPs/RAM_4Kx32.v
 ../../verilog/rtl/IPs/RAM_3Kx32.v
+../../verilog/rtl/IPs/SRAM16K.v
+../../verilog/rtl/IPs/sky130_sram_2kbyte_1rw1r_32x512_8.v
+
+../../verilog/rtl/IPs/AHB_MUX_2M1S.v
+../../verilog/rtl/IPs/AHB_UART_MASTER.v
+
+
+
+
 
 ../../verilog/rtl/ibex/ibex_wrapper.v
 ../../verilog/rtl/ibex/ibex_alu.v
@@ -62,7 +84,9 @@
 ../../verilog/rtl/ibex/ibex_register_file_ff.v
 
 ../../verilog/rtl/soc_core.v
+../../verilog/rtl/soc.v
 
 IBEX_SoC_TB.v
+../defines.v
 ../sst26wf080b.v
 ../23LC512.v 
